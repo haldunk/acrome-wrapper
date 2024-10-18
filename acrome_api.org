@@ -1,0 +1,141 @@
+* Acrome API
+
+This API documentation is for version 1.1.4.
+
+** Master
+*** Motor Drive Control
+enable_torque(id: int, en: bool)
+
+    Enable power to the motor of the driver.
+    
+    Args:
+        id (int): The device ID of the driver
+        en (bool): Enable. True enables the torque.
+
+set_operation_mode(id: int, mode: smd._internals.OperationMode)
+    Set the operation mode of the driver.
+    
+    Args:
+        id (int): The device ID of the driver.
+        mode (OperationMode): One of the PWM, Position, Velocity, Torque modes.
+(END)
+  
+get_operation_mode(id: int)
+  
+    Get the current operation mode from the driver.
+    
+    Args:
+        id (int): The device ID of the driver.
+    
+    Returns:
+        list | None: Returns the list containing the operation mode, otherwise None.
+        
+*** Voltage Mode Control
+set_duty_cycle(id: int, pct: float)
+  
+    Set the duty cycle to the motor for PWM control mode in terms of
+    percentage.  Negative values will change the motor direction.
+    
+    Args:
+        id (int): The device ID of the driver.
+        pct (int | float): Duty cycle percentage.
+
+*** Speed Mode Control
+    def set_shaft_cpr(self, id: int, cpr: float):
+        """ Set the count per revolution (CPR) of the motor output shaft.
+
+        Args:
+            id (int): The device ID of the driver.
+            cpr (float): The CPR value of the output shaft/
+        """
+        
+    def get_shaft_cpr(self, id: int):
+        """ Get the count per revolution (CPR) of the motor output shaft.
+
+        Args:
+            id (int): The device ID of the driver.
+
+        Returns:
+            list | None: Returns the list containing the output shaft CPR, otherwise None.
+        """
+
+    def set_shaft_rpm(self, id: int, rpm: float):
+        """ Set the revolution per minute (RPM) value of the output shaft at 12V rating.
+
+        Args:
+            id (int): The device ID of the driver.
+            rpm (float): The RPM value of the output shaft at 12V
+        """
+
+    def get_shaft_rpm(self, id: int):
+        """ Get the revolution per minute (RPM) value of the output shaft at 12V rating.
+
+        Args:
+            id (int): The device ID of the driver.
+
+        Returns:
+            list | None: Returns the list containing the output shaft RPM characteristics, otherwise None.
+        """
+
+    def set_velocity_limit(self, id: int, vl: int):
+        """ Set the velocity limit for the motor output shaft in terms of RPM. The velocity limit
+        applies only in velocity mode. Default velocity limit is 65535.
+
+        Args:
+            id (int): The device ID of the driver.
+            vl (int): New velocity limit (RPM)
+        """
+        
+    def get_velocity_limit(self, id: int):
+        """ Get the velocity limit from the driver in terms of RPM.
+
+        Args:
+            id (int): The device ID of the driver.
+
+        Returns:
+            list | None: Returns the list containing the velocity limit, otherwise None.
+        """
+
+    def set_velocity(self, id: int, sp: float):
+        """ Set the desired setpoint for the velocity control in terms of RPM.
+
+        Args:
+            id (int): The device ID of the driver.
+            sp (int | float): Velocity control setpoint.
+        """
+
+    def get_velocity(self, id: int):
+        """ Get the current velocity of the motor output shaft from the driver in terms of RPM.
+
+        Args:
+            id (int): The device ID of the driver.
+
+        Returns:
+            list | None: Returns the list containing the current velocity, otherwise None.
+        """
+
+    def set_control_parameters_velocity(self, id: int, p=None, i=None, d=None, db=None, ff=None, ol=None):
+        """ Set the control block parameters for velocity control mode.
+        Only assigned parameters are written, None's are ignored. The default
+        max output limit is 950.
+
+        Args:
+            id (int): The device ID of the driver.
+            p (float): Proportional gain. Defaults to None.
+            i (float): Integral gain. Defaults to None.
+            d (float): Derivative gain. Defaults to None.
+            db (float): Deadband (of the setpoint type). Defaults to None.
+            ff (float): Feedforward. Defaults to None.
+            ol (float): Maximum output limit. Defaults to None.
+        """
+
+    def get_control_parameters_velocity(self, id: int):
+        """ Get the velocity control block parameters.
+
+        Args:
+            id (int): The device ID of the driver.
+
+        Returns:
+            list | None: Returns the list [P, I, D, FF, DB, OUTPUT_LIMIT], otherwise None.
+        """
+                
