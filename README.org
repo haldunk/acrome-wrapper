@@ -284,7 +284,7 @@ tailored to the associated module hardware.
 the use of the library functionalities. The scripts are
 build based on the following assumptions:
 
-  - Acrome USB gateway is on device ''/dev/acrome''
+  - Acrome USB gateway is on device ''/dev/ttyUSB0''
 
 The examples are organized to be run in the virtual
 environment. Therefore, before running them you must enter
