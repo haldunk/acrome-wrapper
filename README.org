@@ -257,7 +257,22 @@ raised. If no module matches the given conditions
 #+begin_src python
 from acrome_wrapper import Module
 
-left_motor = Module.find(name='Left Motor')
+left_motor = Module.get(name='Left Motor')
+#+end_src
+
+Specific module classes are captured by their respective
+[[Module Sub Classes]]. Each module sub class overrides the
+*all*, *find* and *get* static methods to execute the
+process limited within their module kind. In other words
+using the sub class management command implicitly sets the
+kind condition. This is a short form convenience. The
+following two approaches both produce the same output.
+
+#+begin_src python
+from acrome_wrapper import Motor
+
+gotten_by_motor = Motor.get(mod_id=0)
+gotten_by_module = Module.get(kind=Module.Kind.MOTOR, mod_id=0)
 #+end_src
 
 Each module is given a unique idenfying name. During module
@@ -287,7 +302,6 @@ accessed using the *label* read-only property.
 left_motor.label
 #+end_src
 
-
 *** Module Sub Classes
 
 To capture each specialized module implementation a class
@@ -298,6 +312,21 @@ tailored to the associated module hardware.
 **** Motor Module
 
 [[file:acrome_wrapper/module.py::class Motor][Motor]] modules are DC motor controllers.
+
+Motor modules can be queried using the *all*, *get* and
+*find* specialized static methods like in [[Module Logistics][Module]]s.
+
+#+begin_src python
+from acrome_wrapper import Motor
+
+all_motors = Motor.all()
+
+usb0_motors = Motor.find(master=master_usb0)
+
+left_motor = Motor.get(mod_id=0)
+right_motor = Motor.get(mod_id=6)
+#+end_src
+
 
 **** Distance Module
 

@@ -1,5 +1,8 @@
-'''Module abstraction layer'''
+'''Module abstraction layer
 
+'''
+
+from typing import List
 from enum import Enum
 from smd import red
 from .defaults import *
@@ -135,7 +138,7 @@ class Module:
     self._smd_id = smd_id
     self._mod_id = mod_id
     self.name = name
-    MODULES.append(self) ###
+    MODULES.append(self)
     
   def __str__(self):
     return self.name
@@ -242,7 +245,6 @@ class Module:
         raise NotImplementedError
       case _:
         raise UnknownModuleKind(kind)
-    #MODULES.append(module)
     return module
 
   @staticmethod
@@ -351,9 +353,13 @@ class Motor(Module):
     super().__init__(*args, **kwargs)
 
   @staticmethod
+  def all() -> List['module.Motor']:
+    return Module.find(kind=Module.Kind.MOTOR)
+  
+  @staticmethod
   def find(master:'master.Master'=None,
            mod_id:int=None,
-           name:str=None) -> list['module.Module']:
+           name:str=None) -> list['module.Motor']:
     '''Returns a list of motor modules satisfying conditions
 
     Parameters:
@@ -369,7 +375,7 @@ class Motor(Module):
       mod_id=mod_id, name=name)
 
   @staticmethod
-  def get(*args, **kwargs):
+  def get(*args, **kwargs) -> 'module.Motor':
     '''Returns the unique Motor module satisfying conditions
 
     Parameters:
@@ -506,8 +512,54 @@ class Motor(Module):
 class Distance(Module):
 
   _kind = Module.Kind.DISTANCE
+
+  @staticmethod
+  def all() -> List['module.Distance']:
+    '''Returns a list of all distance modules'''
+    return Module.find(kind=Module.Kind.DISTANCE)
   
-  def get(self):
+  @staticmethod
+  def find(master:'master.Master'=None,
+           mod_id:int=None,
+           name:str=None) -> list['module.Distance']:
+    '''Returns a list of distance modules satisfying conditions
+
+    Parameters:
+    master: (optional) communication gateway master
+    mod_id: (optional) module hardware index
+    name  : (optional) full name of the module
+
+    Returns:
+    list of Distance instances satisfying conditions
+    '''
+    return Module.find(
+      master=master, kind=Module.Kind.DISTANCE,
+      mod_id=mod_id, name=name)
+
+  @staticmethod
+  def get(*args, **kwargs) -> 'module.Distance':
+    '''Returns the unique Distance module satisfying conditions
+
+    Parameters:
+    see find()
+
+    Returns:
+    Satisfying single Distance module instance of None
+
+    Raises:
+    MultipleModulesFound: if more than one Distance module satisfies
+    '''
+    kwargs.update({'kind': Module.Kind.DISTANCE})
+    return Module.get(*args, **kwargs)
+  
+  def setup(self):
+    '''Hardware setup for the distance module.
+    '''
+    pass
+
+  
+  def measure(self) -> int:
+    '''Returns the most recent measured range.'''
     return self._master.get_distance(
       self._smd_id, self._mod_id)
     

@@ -1,4 +1,6 @@
-'''Serial communication master'''
+'''Serial communication master
+
+'''
 
 from typing import Union, List, Dict
 from pathlib import Path
