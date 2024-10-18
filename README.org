@@ -161,9 +161,10 @@ validate()
 The final function call to [[file:acrome_wrapper/system.py::def validate][validate()]] is crucial. It checks
 if the specified modules exists in the system and
 initializes the master instances for run-time
-commpunication.
+communication.
 
 *** Module Hardware Setup
+
 At the start up the setup() method of all modules should be
 called. This method executes any required hardware
 initialization.
@@ -206,7 +207,8 @@ Note that clearing masters but not modules and attempting
 to use the module instances will raise exception as there
 will not be any communication channel.
 
-*** Handling Modules
+*** Module Logistics
+
 The [[file:acrome_wrapper/module.py::class Module:][Module]] class provides a collection of static methods to
 manage module instances in the system definition.
 
@@ -259,7 +261,6 @@ an automatically generated descriptive name is assigned. By
 setting the name property the name of a module can be
 changed at any time.
 
-
 #+begin_src python
 from acrome_wrapper import Module
 
@@ -267,23 +268,44 @@ left_motor = Module.find(kind=Module.Kind.MOTOR)[0]
 left_motor.name = 'Left Motor'
 #+end_src
 
+Each module is assigned a unique short form *label* which
+is compiled using the index of the SMD it is attached to
+and the module index. For MOTOR modules (SMD) the label is
+the index. For all other modules it is a tuple consisting
+of the index of the managing SMD and the index of the
+module itself.
+
+Label is sort of an address for the module and can be
+accessed using the *label* read-only property.
+
+#+begin_src python
+left_motor.label
+#+end_src
+
+
 *** Module Sub Classes
+
 To capture each specialized module implementation a class
 is derived from the base Module class. Each child Module
 class defines interface and functionality specifically
 tailored to the associated module hardware.
 
-**** Motor Modules
+**** Motor Module
 
 [[file:acrome_wrapper/module.py::class Motor][Motor]] modules are DC motor controllers.
 
+**** Distance Module
+
+[[file:acrome_wrapper/module.py::class Distance][Distance]] modules are ultrasonic distance sensors.
 
 ** Examples
 
 [[file:example/][A collection of simple examples]] are provided to demonstrate
-the use of the library functionalities. The scripts are
-build based on the following assumptions:
+the use of the library functionalities.
 
+The scripts are build based on the following assumptions:
+
+  - There is at least one SMD RED attached to the system
   - Acrome USB gateway is on device ''/dev/ttyUSB0''
 
 The examples are organized to be run in the virtual
@@ -295,8 +317,11 @@ source venv/bin/activate
 #+end_src
   
 To run a specific example use the following shell command
-where ''<script>'' is the name of the example script.
+where ''<script>'' is the name of the example script. 
   
 #+begin_src sh
 python -m example.<script>
 #+end_src
+
+This command must be *executed at the top folder* so that
+the acrome_wrapper package is accessible.

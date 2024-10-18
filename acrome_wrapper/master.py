@@ -8,7 +8,7 @@ from .module import Module
 
 __all__ = [
   'NonUniqueMasterName',
-  'MasterNameConflict',
+  'DuplicateMasterError',
   'NoMasterSetup',
   'Master',
 ]
@@ -27,16 +27,16 @@ class NonUniqueMasterName(Exception):
     super().__init__(
       "Non-unique Master name: {}".format(name))
     
-class MasterNameConflict(Exception):
+class DuplicateMasterError(Exception):
   
   def __init__(self, device_path):
     super().__init__(
-      "Master bound to {} exists".format(device_path))
+      "There already exists a master bound to {}".format(device_path))
 
 class NoMasterSetup(Exception):
     
   def __init__(self):
-    super().__init__("No master has set up")
+    super().__init__("No master has been set up")
 
   
 class Master(red.Master):
@@ -80,7 +80,7 @@ class Master(red.Master):
   @device_path.setter
   def device_path(self, value):
     if value in map(lambda m: m.device_path, MASTERS):
-      raise MasterNameConflict(value)
+      raise DuplicateMasterError(value)
     else:
       self._device_path = value
 
