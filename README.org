@@ -3,11 +3,16 @@
 This python library is a wrapper for the official [[https://github.com/serhargun/Acrome-SMD][Acrome
 SMD python library]]. It provides a formal and object
 oriented interface to define, manage and control systems
-consisting of SMD modules.
+consisting of Acrome modules.
 
   - [[file:release.org][Releases]]
   - [[file:acrome_api.org][Acrome API]]
 
+** Branches
+
+  - *main*: most recent stable version. See [[file:release.org][Releases]] for a list of certain milestones of this branch.
+  - *devel*: potantially unstable active development branch for ongoing code merges
+    
 ** Installation
 *** Installation from Source
 

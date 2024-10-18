@@ -1,8 +1,8 @@
 * Releases
-** main
+
 ** 0.0.0
+- General system definition and management is implemented
+- system, master and module sources are defined
 - Master and Module classes defined.
 - Motor and Distance Module classes are started
-- system, master and module sources are defined
-- General system definition and management is implemented
 - Motor module voltage control mode interface is implemented
