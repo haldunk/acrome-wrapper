@@ -1,7 +1,7 @@
 from acrome_wrapper import Master, Module, validate, layout
 
 
-master = Master('/dev/acrome', name='Master')
+master = Master('/dev/ttyUSB0', name='Master')
 
 motor_left = Module.add(
   master=master, smd_id=0,

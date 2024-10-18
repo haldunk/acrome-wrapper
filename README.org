@@ -277,3 +277,26 @@ tailored to the associated module hardware.
 
 [[file:acrome_wrapper/module.py::class Motor][Motor]] modules are DC motor controllers.
 
+
+** Examples
+
+[[file:example/][A collection of simple examples]] are provided to demonstrate
+the use of the library functionalities. The scripts are
+build based on the following assumptions:
+
+  - Acrome USB gateway is on device ''/dev/acrome''
+
+The examples are organized to be run in the virtual
+environment. Therefore, before running them you must enter
+into the virtual environment.
+
+#+begin_src sh
+source venv/bin/activate
+#+end_src
+  
+To run a specific example use the following shell command
+where ''<script>'' is the name of the example script.
+  
+#+begin_src sh
+python -m example.<script>
+#+end_src
