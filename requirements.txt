@@ -1,0 +1,3 @@
+acrome-smd==1.1.4
+build
+ipython
