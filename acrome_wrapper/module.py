@@ -324,12 +324,6 @@ class Motor(Module):
 
   '''
 
-  _kind = Module.Kind.MOTOR
-  _mode = None
-  _is_enabled = None
-  _voltage = 0.0
-  _supply_voltage = DEFAULT_SUPPLY_VOLTAGE
-  
   class Mode(Option):
     '''Motor drive control modes'''
     VOLTAGE_CONTROL = red.OperationMode.PWM
@@ -337,6 +331,11 @@ class Motor(Module):
     VELOCITY_CONTROL = red.OperationMode.Velocity
     TORQUE_CONTROL = red.OperationMode.Torque
 
+  class Polarity(Enum):
+    '''Polarity of the motor terminal connection.'''
+    POSITIVE = 1.0
+    NEGATIVE = -1.0
+    
   class IncorrectModeError(Exception):
 
     def __init__(self, current_mode):
@@ -349,6 +348,14 @@ class Motor(Module):
     def __init__(self):
       super().__init__("Motor is not enabled")
       
+  
+  _kind = Module.Kind.MOTOR
+  _mode = None
+  _is_enabled = None
+  _voltage = 0.0
+  _supply_voltage = DEFAULT_SUPPLY_VOLTAGE
+  _polarity = Polarity.POSITIVE
+  
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
 
@@ -429,17 +436,12 @@ class Motor(Module):
       id=self._smd_id, en=False)
     self._is_enabled = False
 
-  def _get_mode(self):
-    '''Updates the internally managed motor drive mode
-    register'''
-    self._mode = Motor.Mode.member(
-      self._master.get_operation_mode(id=self._smd_id))
-  
   @property
   def mode(self) -> 'Motor.Mode':
     '''Acquires the the currently active mode from motor drive
     hardware and returns it'''
-    self._get_mode()
+    self._mode = Motor.Mode.member(
+      self._master.get_operation_mode(id=self._smd_id))
     return self._mode
 
   @mode.setter
@@ -458,6 +460,22 @@ class Motor(Module):
     self._master.set_operation_mode(
       id=self._smd_id, mode=operation.value)
 
+  def get_info(self) -> dict:
+    '''Returns the hardware and firmware version of the
+    associated embedded SMD card.
+
+    HardwareVersion: SMD hardware version
+    SoftwareVersion: SMD firmware version
+    '''
+    return self._master.get_driver_info(
+      id=self._smd_id)
+
+  def reset(self):
+    '''Resets the control mode and command to voltage mode
+    with zero terminal voltage and disables the motor driver. '''
+    self.mode = Motor.Mode.VOLTAGE_CONTROL
+    self.set_voltage(0.0, forced=True)
+    
   @property
   def supply_voltage(self) -> float:
     '''Returns the currently set supply voltage'''
@@ -473,6 +491,16 @@ class Motor(Module):
       'Supply voltage must be a positive value'
     self._supply_voltage = voltage
     
+  @property
+  def polarity(self) -> 'Motor.Polarity':
+    '''Returns the active motor terminal polarity'''
+    return self._polarity
+
+  @polarity.setter
+  def polarity(self, direction:'Motor.Polarity'):
+    '''Sets the motor terminal polarity'''
+    self._polarity = direction
+    
   def set_voltage(self,
                   voltage:float,
                   forced:bool=False) -> float:
@@ -485,18 +513,18 @@ class Motor(Module):
       voltage: (float) Voltage in volts
       forced: (bool) If True ignore drive enable state
     Return:
-      Actual voltage generated (after clapping)
+      Actual voltage generated (after clampping)
 
     '''
     if self._mode != Motor.Mode.VOLTAGE_CONTROL:
       raise Motor.IncorrectModeError(self._mode)
     if not forced and not self._is_enabled:
       raise Motor.NotEnabledError
-    duty_cycle = voltage / self._supply_voltage * 100.0
-    duty_cycle = max(-100.0, min(duty_cycle, 100.0))
+    duty_cycle = float(voltage / self._supply_voltage)
+    duty_cycle = max(-1.0, min(duty_cycle, 1.0))
     self._master.set_duty_cycle(
-      id=self._smd_id, pct=duty_cycle)
-    self._voltage = duty_cycle * 0.01 * self._supply_voltage
+      id=self._smd_id, pct=self._polarity.value*duty_cycle*100.0)
+    self._voltage = duty_cycle * self._supply_voltage
     return self._voltage
 
   def get_voltage(self) -> float:

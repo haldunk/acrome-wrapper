@@ -9,15 +9,16 @@ There are three different ways to define Master objects:
 
 from typing import List
 import argparse
-from enum import Enum
 from acrome_wrapper import Master
 
 
-class Method(Enum):
-  INDIVIDUALLY = 'individually'
-  BY_DEV_LIST = 'by-dev-list'
-  BY_DEV_DICT = 'by-dev-dict'
 
+METHODS = [
+  'individually',
+  'by-dev-list',
+  'by-dev-dict',
+]
+  
   
 def get_arguments():
   parser = argparse.ArgumentParser(
@@ -25,8 +26,7 @@ def get_arguments():
     description='Master setup demonstration')
   parser.add_argument(
     'method', nargs='?',
-    default=Method.INDIVIDUALLY.value,
-    choices=[m.value for m in Method],
+    default='individually', choices=METHODS,
     help='Method to use to setup masters')
   return parser.parse_args()
 
@@ -62,11 +62,11 @@ if __name__ == '__main__':
 
   print(f"Using method: {args.method}")
   match args.method:
-    case Method.INDIVIDUALLY.value:
+    case 'individually':
       setup_individually()
-    case Method.BY_DEV_LIST.value:
+    case 'by-dev-list':
       setup_by_dev_list()
-    case Method.BY_DEV_DICT.value:
+    case 'by-dev-dict':
       setup_by_dev_dict()
     case _:
       raise Exception(

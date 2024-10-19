@@ -327,10 +327,132 @@ left_motor = Motor.get(mod_id=0)
 right_motor = Motor.get(mod_id=6)
 #+end_src
 
+Motor hardware and software information can be queried
+using the *get_info* method which will return the version
+of the hardware and the firmware of the associated SMD
+card.
+
+#+begin_src python
+info = motor.get_info()
+#+end_src
+
+As in all modules the Motor modules need to be initialized
+prior to use. This can be done on an individual basis by
+directly calling the *setup()* method as
+follows. Alternatively, the system-wide *setup()* function
+call would also initialize all Motor modules along with
+other modules in the system. Motor module initialization
+puts the associated controller in voltage control mode and
+sets the terminal voltage to zero.
+
+#+begin_src python
+motor.setup()
+#+end_src
+
+When the motor is first initialized it is in *Voltage
+Control Mode* and the terminal voltage is set to zero and
+the motor driver is disabled. This is the /reset state/ for
+Motor modules. To bring a Motor module to the Reset State
+at any time the *reset()* method can be called.
+
+#+begin_src python
+motor.reset()
+#+end_src
+
+There are four control modes implemented in the
+hardware. These modes are enumurated in the *Motor.Mode*
+enumuration.
+
+  - Voltage Control Mode
+  - Position Control Mode
+  - Velocity Control Mode
+  - Torque Control Mode
+
+The /active/ control mode can be queried using the *mode*
+property. Setting the same property to the desired
+Motor.Mode enumuration value would set the hardware control
+mode. Note that when control mode of a Motor module is
+changed its motor driver is /disabled/.
+
+#+begin_src python
+motor.mode = Motor.Mode.POSITION_CONTROL
+print(f"Motor Mode: {motor.mode}")
+#+end_src
+
+The motor hardware needs to be *enabled* before use
+otherwise control commands will not have any effect and
+calling them will produce exception. The activation state
+of Motor modules is controlled by two methods: *enable()*
+to activate driver; and *disable(()* to deactivate the
+driver. The current activation state can be queried using
+*is_enabled* property.
+
+#+begin_src python
+motor.enable()
+motor.disable()
+print("Motor State: {}".format(
+  'ENABLED' if motor.is_enabled else 'DISABLED'))
+#+end_src
+
+***** Voltage Control Mode
+
+In the Voltage Control Mode the motor controller dictates
+the terminal voltage of the associated DC motor.
+
+Operations in this mode requires the explicit specification
+of the driver supply voltage. The [[file:acrome_wrapper/defaults.py::DEFAULT_SUPPLY_VOLTAGE][default supply voltage]] is
+set to 12.0V. If it is different in your system this
+property needs to be adjusted. As this is a Motor instance
+property it permits different Motors to use different
+supply voltage levels. 
+
+#+begin_src python
+motor.supply_voltage = 24.0
+print(f"Motor Supply Voltage: {motor.supply_voltage:.1f} V")
+#+end_src
+
+The motor terminal polarity defines the orientation of the
+positive and negative terminals with respect to the motor
+driver output terminals. The *polarity* property of the
+Motor module can be used to swap terminal orientation
+between positive and negative and also to query the active
+polarity setting.
+
+#+begin_src python
+motor.polarity = Motor.Polarity.NEGATIVE
+print(f"Motor Polarity: {motor.polarity}")
+#+end_src
+
+To set the terminal voltage set point use *set_voltage()*
+function. This method takes the desired terminal voltage in
+Volts and applies it to the associated SMD hardare as the
+set point after clamping it according to the achivable
+voltage range, [-V_supply, V_supply]. Returns the actual
+applied voltage set point.  The active motor terminal
+voltage set point can be queried using the *get_voltage()*
+method.
+
+#+begin_src python
+applied_voltage = motor.set_voltage(6.0)
+print(f"Motor Terminal Voltage: {motor.get_voltage():.1f}")
+#+end_src
+
+Note that the actualy voltage terminal voltage would be
+proportional to the actual supply voltage. If the actual
+supply voltage deviates from the specified supply voltage
+the actual motor terminal voltage will deviate by the same
+ratio.
+
+***** Position Control Mode
+
+***** Velocity Control Mode
+
+***** Torque Control Mode
 
 **** Distance Module
 
 [[file:acrome_wrapper/module.py::class Distance][Distance]] modules are ultrasonic distance sensors.
+
 
 ** Examples
 
