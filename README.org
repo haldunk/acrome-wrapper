@@ -445,14 +445,21 @@ ratio.
 
 ***** Position Control Mode
 
+/To be completed/
+
 ***** Velocity Control Mode
 
+/To be completed/
+
 ***** Torque Control Mode
+
+/To be completed/
 
 **** Distance Module
 
 [[file:acrome_wrapper/module.py::class Distance][Distance]] modules are ultrasonic distance sensors.
 
+/To be completed/
 
 ** Examples
 
