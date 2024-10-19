@@ -199,7 +199,7 @@ class Module:
           kind:'Module.Kind',
           mod_id:int=None,
           name:str=None) -> 'module.Module':
-    '''Adds a new device into the system
+    '''Adds a new module into the system
 
     Parameters:
     master: Master used for communicating with the device
@@ -211,7 +211,7 @@ class Module:
     name  : (optional) unique string label for the module
 
     Returns:
-    Device: device instance for the new device
+    Module instance for the new module
 
     Raises:
     UnknownModuleKind: if kind in module_label is unrecognized
@@ -358,6 +358,26 @@ class Motor(Module):
   
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
+
+  @staticmethod
+  def add(master:'master.Master',
+          smd_id:int,
+          name:str=None) -> 'module.Motor':
+    '''Adds a new Motor module into the system
+
+    Parameters:
+    master: Master used for communicating with the device
+    smd_id: ID of the SMD board serving as bridge for the
+            device
+    name  : (optional) unique string label for the module
+
+    Returns:
+    Motor instance for the new motor module
+
+    Raises:
+    UnknownModuleKind: if kind in module_label is unrecognized
+    '''
+    return Motor(master=master, smd_id=smd_id, name=name)
 
   @staticmethod
   def all() -> List['module.Motor']:
