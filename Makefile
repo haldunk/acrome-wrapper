@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 
+# Make management targets
 .PHONY : help
 
 help :
@@ -17,13 +18,13 @@ help :
 	@echo "  test   - runs unit tests"
 	@echo
 	@echo " Package Management"
-	@echo "  clear  - delete compiled package"
-	@echo "  build  - build compiled package"
+	@echo "  clear   - delete compiled package"
+	@echo "  build   - build compiled package"
 	@echo "  install - install compiled package locally"
 
 
 # Virtual environment management targets
-.PHONY : venv-setup venv-pack
+.PHONY : venv-clear venv-setup venv-install venv-pack
 
 venv-clear :
 	@echo "Delete existing virtual environment"
@@ -66,7 +67,7 @@ test :
 
 
 # Packaging management targets
-.PHONY : clear build
+.PHONY : clear build install
 
 clear :
 	@echo "Delete compiled package files"
@@ -78,6 +79,6 @@ build : clear
 	@source venv/bin/activate && python -m build
 
 install :
-	@echo "Installing package"
+	@echo "Installing package locally"
 	@pip uninstall --break-system-packages acrome_wrapper
 	@pip install -U --break-system-packages dist/*.whl

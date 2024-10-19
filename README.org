@@ -19,26 +19,43 @@ underlying Acrome API used in this wrapper implementation.
     for ongoing code merges
     
 * Installation
-** Installation from Source
+** From Source
 
-Installation from source requires the source to be compiled
-first. To setup the compilation virtual environment run:
+The python packages can be install locally from
+source. After cloning the repository build the package and
+simply run the install make target.
 
 #+begin_src sh
+git clone https://github.com/haldunk/acrome-wrapper.git
+cd acrome-wrapper
 make venv-setup
-#+end_src
-
-To compile the source run:
-
-#+begin_src sh
 make build
+make install
 #+end_src
 
-After the compilation is finalized the resulting package
-can be install to the system by running:
+** From PyPI
+
+These packages can be installed from pypi by running the
+following command:
 
 #+begin_src sh
-make install
+pip install acrome-wrapper
+#+end_src
+
+** From GitHub
+
+Alternatively, you can install directly from the github repository
+using the following command:
+
+#+begin_src sh
+pip install git+https://github.com/haldunk/acrome-wrapper.git
+#+end_src
+
+To install a specific tagged version or a branch use the following
+syntax:
+
+#+begin_src sh
+pip install git+https://github.com/haldunk/acrome-wrapper.git@<tag|branch>
 #+end_src
 
 * Usage
