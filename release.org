@@ -1,6 +1,12 @@
-* Releases
+#+TITLE: Releases
 
-** 0.0.0
+A three digit versioning system is employed:
+
+  - MAJOR: incremented when backward compatibility is lost
+  - MINOR: incremeneted when database schema is changed
+  - BUILD: incremented when all other changes made
+
+* 0.0.0
 - General system definition and management is implemented
 - system, master and module sources are defined
 - Master and Module classes defined.

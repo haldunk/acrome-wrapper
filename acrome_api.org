@@ -1,9 +1,9 @@
-* Acrome API
+#+TITLE: Acrome API
 
 This API documentation is for version 1.1.4.
 
-** Master
-*** Motor Drive Control
+* Master
+** Motor Drive Control
 enable_torque(id: int, en: bool)
 
     Enable power to the motor of the driver.
@@ -30,7 +30,7 @@ get_operation_mode(id: int)
     Returns:
         list | None: Returns the list containing the operation mode, otherwise None.
         
-*** Voltage Mode Control
+** Voltage Mode Control
 set_duty_cycle(id: int, pct: float)
   
     Set the duty cycle to the motor for PWM control mode in terms of
@@ -40,7 +40,7 @@ set_duty_cycle(id: int, pct: float)
         id (int): The device ID of the driver.
         pct (int | float): Duty cycle percentage.
 
-*** Speed Mode Control
+** Speed Mode Control
     def set_shaft_cpr(self, id: int, cpr: float):
         """ Set the count per revolution (CPR) of the motor output shaft.
 

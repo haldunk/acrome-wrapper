@@ -1,20 +1,25 @@
-* acrome-wrapper
+#+TITLE: acrome-wrapper: An Object Oriented Wrapper for Acrome API
+#+AUTHOR: Haldun Komsuoglu
 
-This python library is a wrapper for the official [[https://github.com/serhargun/Acrome-SMD][Acrome
-SMD python library]]. It provides a formal and object
-oriented interface to define, manage and control systems
-consisting of Acrome modules.
+*acrome-wrapper( is a wrapper for the official [[https://github.com/serhargun/Acrome-SMD][Acrome SMD
+python library]]. It provides a formal and object oriented
+interface to define, manage and control systems consisting
+of Acrome modules.
 
-  - [[file:release.org][Releases]]
-  - [[file:acrome_api.org][Acrome API]]
+See [[file:release.org][Releases]] for a full list of tagged stable versions.
 
-** Branches
+See [[file:acrome_api.org][Acrome API]] for function prototypes and notes on the
+underlying Acrome API used in this wrapper implementation.
 
-  - *main*: most recent stable version. See [[file:release.org][Releases]] for a list of certain milestones of this branch.
-  - *devel*: potantially unstable active development branch for ongoing code merges
+* Branches
+
+  - *main*: most recent stable version. See [[file:release.org][Releases]] for a
+    list of certain milestones of this branch.
+  - *devel*: potantially unstable active development branch
+    for ongoing code merges
     
-** Installation
-*** Installation from Source
+* Installation
+** Installation from Source
 
 Installation from source requires the source to be compiled
 first. To setup the compilation virtual environment run:
@@ -36,30 +41,8 @@ can be install to the system by running:
 make install
 #+end_src
 
-** Testing
-
-Enter into the virtual environment before running the test
-scripts.
-
-#+begin_src sh
-source venv/bin/activate
-#+end_src
-
-*** Basic Test
-
-To run basic tests on the library use the [[file:test.py][test.py]]
-script. For convenience a make target is provided to run
-tests. 
-
-#+begin_src sh
-make test
-#+end_src
-
-*NOTE:* Basic unit test script is a placeholder at this
- time.
-
-** Use
-*** Master Setup
+* Usage
+** Master Setup
 
 The communication between modules and the central computer
 is managed by one or more master(s) in the system. The
@@ -97,7 +80,7 @@ Master.add(
   baudrate=12500000)
 #+end_src
 
-*** Automatic Module Discovery
+** Automatic Module Discovery
 
 Once [[Master Setup][masters in the system are added]] all available modules
 can be automatically discovered. This functionality is
@@ -126,7 +109,7 @@ from acrome_wrapper import layout
 layout()
 #+end_src
 
-*** Manual Module Specification
+** Manual Module Specification
 
 In most cases the system is known by the designer and the
 system abstraction can be (and preferrably) set up
@@ -168,7 +151,7 @@ if the specified modules exists in the system and
 initializes the master instances for run-time
 communication.
 
-*** Module Hardware Setup
+** Module Hardware Setup
 
 At the start up the setup() method of all modules should be
 called. This method executes any required hardware
@@ -183,7 +166,7 @@ from acrome_wrapper import setup
 setup()
 #+end_src
 
-*** Clearing the Abstraction
+** Clearing the Abstraction
 
 The system abstraction, a collection of Master and Module
 class instances, can be cleared using convenience
@@ -212,7 +195,7 @@ Note that clearing masters but not modules and attempting
 to use the module instances will raise exception as there
 will not be any communication channel.
 
-*** Module Logistics
+** Module Logistics
 
 The [[file:acrome_wrapper/module.py::class Module:][Module]] class provides a collection of static methods to
 manage module instances in the system definition.
@@ -302,14 +285,14 @@ accessed using the *label* read-only property.
 left_motor.label
 #+end_src
 
-*** Module Sub Classes
+** Module Sub Classes
 
 To capture each specialized module implementation a class
 is derived from the base Module class. Each child Module
 class defines interface and functionality specifically
 tailored to the associated module hardware.
 
-**** Motor Module
+*** Motor Module
 
 [[file:acrome_wrapper/module.py::class Motor][Motor]] modules are DC motor controllers.
 
@@ -394,7 +377,7 @@ print("Motor State: {}".format(
   'ENABLED' if motor.is_enabled else 'DISABLED'))
 #+end_src
 
-***** Voltage Control Mode
+**** Voltage Control Mode
 
 In the Voltage Control Mode the motor controller dictates
 the terminal voltage of the associated DC motor.
@@ -443,25 +426,46 @@ supply voltage deviates from the specified supply voltage
 the actual motor terminal voltage will deviate by the same
 ratio.
 
-***** Position Control Mode
+**** Position Control Mode
 
 /To be completed/
 
-***** Velocity Control Mode
+**** Velocity Control Mode
 
 /To be completed/
 
-***** Torque Control Mode
+**** Torque Control Mode
 
 /To be completed/
 
-**** Distance Module
+*** Distance Module
 
 [[file:acrome_wrapper/module.py::class Distance][Distance]] modules are ultrasonic distance sensors.
 
 /To be completed/
 
-** Examples
+* Testing
+
+Enter into the virtual environment before running the test
+scripts.
+
+#+begin_src sh
+source venv/bin/activate
+#+end_src
+
+** Basic Test
+
+To run basic tests on the library use the [[file:test.py][test.py]]
+script. For convenience a make target is provided to run
+tests. 
+
+#+begin_src sh
+make test
+#+end_src
+
+*NOTE:* Basic unit test script is a placeholder at this
+ time.
+* Examples
 
 [[file:example/][A collection of simple examples]] are provided to demonstrate
 the use of the library functionalities.
