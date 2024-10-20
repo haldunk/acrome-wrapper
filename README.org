@@ -2,13 +2,13 @@
 #+AUTHOR: Haldun Komsuoglu
 
 *acrome-wrapper( is a wrapper for the official [[https://github.com/serhargun/Acrome-SMD][Acrome SMD
-python library]]. It provides a formal and object oriented
-interface to define, manage and control systems consisting
-of Acrome modules.
+python library (v1.1.4)]]. It provides a formal and object
+oriented interface to define, manage and control systems
+consisting of Acrome modules.
 
 See [[file:release.org][Releases]] for a full list of tagged stable versions.
 
-See [[file:acrome_api.org][Acrome API]] for function prototypes and notes on the
+See [[file:docs/acrome_api.org][Acrome API]] for function prototypes and notes on the
 underlying Acrome API used in this wrapper implementation.
 
 * Branches
