@@ -16,6 +16,7 @@ help :
 	@echo " Development Management"
 	@echo "  clean  - delete all temporary files"
 	@echo "  test   - runs unit tests"
+  @echo "  get-acrome-api - downloads underlying API library"
 	@echo
 	@echo " Package Management"
 	@echo "  clear   - delete compiled package"
@@ -54,7 +55,7 @@ endif
 
 
 # Development management targets
-.PHONY : clean test
+.PHONY : clean test get-acrome-api
 
 clean :
 	@echo "Deleting all temporary files"
@@ -65,6 +66,10 @@ test :
 	@echo "Running unit tests"
 	@python test.py
 
+get-acrome-api :
+	@echo "Downloading Underlying Acrome API"
+	@git clone --no-checkout https://github.com/Acrome-Smart-Motion-Devices/python-library.git acrome_api
+	@cd acrome_api && git checkout tags/1.1.4
 
 # Packaging management targets
 .PHONY : clear build install

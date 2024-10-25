@@ -1,7 +1,7 @@
 #+TITLE: acrome-wrapper: An Object Oriented Wrapper for Acrome API
 #+AUTHOR: Haldun Komsuoglu
 
-*acrome-wrapper( is a wrapper for the official [[https://github.com/serhargun/Acrome-SMD][Acrome SMD
+*acrome-wrapper( is a wrapper for the official [[https://github.com/Acrome-Smart-Motion-Devices/python-library/releases/tag/1.1.4][Acrome SMD
 python library (v1.1.4)]]. It provides a formal and object
 oriented interface to define, manage and control systems
 consisting of Acrome modules.
@@ -41,6 +41,8 @@ following command:
 #+begin_src sh
 pip install acrome-wrapper
 #+end_src
+
+*WARNING:* The package has not been uploaded to PyPI yet.
 
 ** From GitHub
 
@@ -509,3 +511,5 @@ python -m example.<script>
 
 This command must be *executed at the top folder* so that
 the acrome_wrapper package is accessible.
+
+
