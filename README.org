@@ -338,6 +338,20 @@ card.
 info = motor.get_info()
 #+end_src
 
+Each Motor Module (SMD) is assigned a unique SMD ID. This
+ID may need to be changed (to avoid id conflict on a
+Master). To be able to change a motor SMD ID first the
+motor needs to be setup either using the discover() method
+or manually using the current ID. Afterwards the simply
+assigning the desired id to the *mod_id* property of the
+motor instance will reset the ID and save it on the
+associated embedded device.
+
+#+begin_src python
+motor = Motor.get(mod_id=3)
+motor.mod_id = 4
+#+end_src
+
 As in all modules the Motor modules need to be initialized
 prior to use. This can be done on an individual basis by
 directly calling the *setup()* method as

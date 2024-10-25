@@ -16,7 +16,7 @@ help :
 	@echo " Development Management"
 	@echo "  clean  - delete all temporary files"
 	@echo "  test   - runs unit tests"
-  @echo "  get-acrome-api - downloads underlying API library"
+	@echo "  get-acrome-api - downloads underlying API library"
 	@echo
 	@echo " Package Management"
 	@echo "  clear   - delete compiled package"

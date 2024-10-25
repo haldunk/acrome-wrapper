@@ -163,6 +163,11 @@ class Module:
   @property
   def mod_id(self):
     return self._mod_id or self._smd_id
+
+  @mod_id.setter
+  def mod_id(self, id:int):
+    raise NotImplementedError(
+      'Child Module class does not implement id setter.')
   
   @property
   def label(self):
@@ -257,6 +262,7 @@ class Module:
   def find(master:'master.Master'=None,
            kind:'Module.Kind'=None,
            mod_id:int=None,
+           smd_id:int=None,
            name:str=None) -> list['module.Module']:
     '''Returns a list of modules satisfying conditions
 
@@ -264,6 +270,7 @@ class Module:
     master: (optional) communication gateway master
     kind  : (optional) module kind
     mod_id: (optional) module hardware index
+    smd_id: (optional) id of the managing SMD card (Motor)
     name  : (optional) full name of the module
 
     Returns:
@@ -279,6 +286,9 @@ class Module:
     if mod_id is not None:
       modules = filter(
         lambda m: m.mod_id == mod_id, modules)
+    if smd_id is not None:
+      modules = filter(
+        lambda m: m._smd_id == smd_id, modules)
     if name is not None:
       modules = filter(
         lambda m: m.name == name, modules)
@@ -386,12 +396,14 @@ class Motor(Module):
   @staticmethod
   def find(master:'master.Master'=None,
            mod_id:int=None,
+           smd_id:int=None,
            name:str=None) -> list['module.Motor']:
     '''Returns a list of motor modules satisfying conditions
 
     Parameters:
     master: (optional) communication gateway master
     mod_id: (optional) module hardware index
+    smd_id: (optional) id of the managing SMD card (Motor)
     name  : (optional) full name of the module
 
     Returns:
@@ -399,7 +411,7 @@ class Motor(Module):
     '''
     return Module.find(
       master=master, kind=Module.Kind.MOTOR,
-      mod_id=mod_id, name=name)
+      mod_id=mod_id, smd_id=smd_id, name=name)
 
   @staticmethod
   def get(*args, **kwargs) -> 'module.Motor':
@@ -416,6 +428,16 @@ class Motor(Module):
     '''
     kwargs.update({'kind': Module.Kind.MOTOR})
     return Module.get(*args, **kwargs)
+
+  def get_info(self):
+    return self._master.get_driver_info(id=self._smd_id)
+
+  @Module.mod_id.setter
+  def mod_id(self, id:int):
+    assert 0 <= id <= 254, 'id must be in [0,254] range'
+    self._master.update_driver_id(id=self._smd_id, id_new=id)
+    for module in Module.find(smd_id=self._smd_id):
+      module._smd_id = id
   
   def setup(self):
     '''Hardware setup for the motor module.
@@ -569,12 +591,14 @@ class Distance(Module):
   @staticmethod
   def find(master:'master.Master'=None,
            mod_id:int=None,
+           smd_id:int=None,
            name:str=None) -> list['module.Distance']:
     '''Returns a list of distance modules satisfying conditions
 
     Parameters:
     master: (optional) communication gateway master
     mod_id: (optional) module hardware index
+    smd_id: (optional) id of the managing SMD card (Motor)
     name  : (optional) full name of the module
 
     Returns:
@@ -582,7 +606,7 @@ class Distance(Module):
     '''
     return Module.find(
       master=master, kind=Module.Kind.DISTANCE,
-      mod_id=mod_id, name=name)
+      mod_id=mod_id, smd_id=smd_id, name=name)
 
   @staticmethod
   def get(*args, **kwargs) -> 'module.Distance':
@@ -605,7 +629,6 @@ class Distance(Module):
     '''
     pass
 
-  
   def measure(self) -> int:
     '''Returns the most recent measured range.'''
     return self._master.get_distance(
