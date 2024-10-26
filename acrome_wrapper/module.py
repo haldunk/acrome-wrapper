@@ -351,7 +351,7 @@ class Motor(Module):
     def __init__(self, current_mode):
       super().__init__(
         "Cannot execute command. Current mode: {}".format(
-          current.mode))
+          current_mode))
 
   class NotEnabledError(Exception):
 
