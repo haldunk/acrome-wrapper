@@ -55,12 +55,14 @@ class ModuleNotFound(Exception):
                master:'master.Master'=None,
                kind:'Module.Kind'=None,
                mod_id:int=None,
+               smd_id:int=None,
                name:str=None):
     super().__init__(
       "Module not found for: " +
       "master: {}".format(master) if master else '' +
       "kind: {}".format(kind.value) if kind else '',
-      "id: {}".format(mod_id) if id else '',
+      "mod_id: {}".format(mod_id) if id else '',
+      "smd_id: {}".format(smd_id) if id else '',
       "name: {}".format(name) if id else '')
     
 class NonUniqueModuleName(Exception):
