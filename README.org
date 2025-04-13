@@ -2,9 +2,9 @@
 #+AUTHOR: Haldun Komsuoglu
 
 *acrome-wrapper( is a wrapper for the official [[https://github.com/Acrome-Smart-Motion-Devices/python-library/releases/tag/1.1.4][Acrome SMD
-python library (v1.1.4)]]. It provides a formal and object
-oriented interface to define, manage and control systems
-consisting of Acrome modules.
+python library (v1.1.4)]]. (See [[SMD Hardware Setup][SMD Hardware Setup]]) It
+provides a formal and object oriented interface to define,
+manage and control systems consisting of Acrome modules.
 
 See [[file:release.org][Releases]] for a full list of tagged stable versions.
 
@@ -61,6 +61,58 @@ pip install git+https://github.com/haldunk/acrome-wrapper.git@<tag|branch>
 #+end_src
 
 * Usage
+** SMD Hardware Setup
+The hardware must have the compatible firmware
+version. This version of the wrapper package is compatible
+with API v1.1.4 which in turn is compatible with the
+firmware v1.0.1.
+
+The SMD hardware firmware can be updated using the original
+SMD library.
+
+First, the available SMD hardware needs to be
+discovered. The following code returns IDs of all attached
+SMD modules on the specified serial line.
+
+#+begin_src python
+from smd import red
+master = red.Master('/dev/ttyUSB0')
+master.scan()
+#+end_src
+
+The firmware version on the *target* hardware can be
+queried. The following code can be used for this purpose.
+
+#+begin_src python
+master.get_driver_info(2)
+#+end_src
+
+The return value contains the current hardware and firmware
+versions.
+
+#+begin_src python
+{'HardwareVersion': 'v2.2.0', 'SoftwareVersion': 'v1.0.1'}
+#+end_src
+
+Running following command requires internet
+connectivity. It downloads the requested firmware from
+remote repository and flashes it to the target SMD
+hardware.
+
+#+begin_src python
+master.update_fw_version(2, 'v1.0.1')
+#+end_src
+
+Keep the module powered and connected to the internet
+through out the update process.
+
+After the firmware update the hardware needs to be power
+cycled.
+
+All available firmwares can be found at the git repository
+at [[https://api.github.com/repos/Acrome-Smart-Motor-Driver/SMD-Red-Firmware/releases/][firmware repository]].
+
+
 ** Master Setup
 
 The communication between modules and the central computer
