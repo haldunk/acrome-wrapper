@@ -323,6 +323,7 @@ class Module:
     overridden by the child module class.'''
     pass
   
+
   
 class Motor(Module):
   '''Motor driver module abstraction class.
@@ -429,9 +430,20 @@ class Motor(Module):
     kwargs.update({'kind': Module.Kind.MOTOR})
     return Module.get(*args, **kwargs)
 
-  def get_info(self):
-    return self._master.get_driver_info(id=self._smd_id)
+  def get_info(self) -> dict:
+    '''Returns the hardware and firmware version of the
+    associated embedded SMD card.
 
+    HardwareVersion: SMD hardware version
+    SoftwareVersion: SMD firmware version
+    '''
+    return self._master.get_driver_info(
+      id=self._smd_id)
+
+  def update_fw(self, version:str='v1.0.1') -> bool:
+    return self._master.update_fw_version(
+      id=self._smd_id, version=version)
+      
   @Module.mod_id.setter
   def mod_id(self, id:int):
     assert 0 <= id <= 254, 'id must be in [0,254] range'
@@ -501,16 +513,6 @@ class Motor(Module):
     self._mode = operation
     self._master.set_operation_mode(
       id=self._smd_id, mode=operation.value)
-
-  def get_info(self) -> dict:
-    '''Returns the hardware and firmware version of the
-    associated embedded SMD card.
-
-    HardwareVersion: SMD hardware version
-    SoftwareVersion: SMD firmware version
-    '''
-    return self._master.get_driver_info(
-      id=self._smd_id)
 
   def reset(self):
     '''Resets the control mode and command to voltage mode

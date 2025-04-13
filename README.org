@@ -112,7 +112,6 @@ cycled.
 All available firmwares can be found at the git repository
 at [[https://api.github.com/repos/Acrome-Smart-Motor-Driver/SMD-Red-Firmware/releases/][firmware repository]].
 
-
 ** Master Setup
 
 The communication between modules and the central computer
@@ -388,6 +387,16 @@ card.
 
 #+begin_src python
 info = motor.get_info()
+#+end_src
+
+Motor firmware can be updated to a specific version using
+*update_fw* method. You can pass the desired version,
+however, if the version number is skipped the API
+compatible most recent firmware version is selected.
+
+#+begin_src python
+motor.update_fw()  # v1.0.1 (most recent compatible)
+motor.update_fw('v2.0.0')
 #+end_src
 
 Each Motor Module (SMD) is assigned a unique SMD ID. This
